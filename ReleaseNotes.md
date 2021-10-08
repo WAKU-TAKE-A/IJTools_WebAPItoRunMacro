@@ -1,3 +1,16 @@
+# Release v0.9.0.1
+
+Latest update: October 6th 2021
+
+## New Features
+
+* Changed the default port number to 1997.
+
+## Bug Fixes
+
+* The argument par3 without a value can be described as follows.
+http://[IP]:[PORT]/run_macro?macro=hoge&par1=1&par2=2&par3
+
 # Release v0.9.0.0
 
 Latest update: October 6th 2021

@@ -45,12 +45,12 @@ import net.freeutils.httpserver.HTTPServer;
  */
 
 /**
- * Ver. 0.9.0.0
+ * Ver. 0.9.0.1
  * Web API to run macro of ImageJ.
  */
 public class WK_WebRunMacro implements ij.plugin.filter.ExtendedPlugInFilter {    
     static HTTPServer server = null;    
-    static int port = 8080;
+    static int port = 1997;
     static boolean no_dialog = false;
     static String status = "start";    
     
@@ -97,7 +97,7 @@ public class WK_WebRunMacro implements ij.plugin.filter.ExtendedPlugInFilter {
             // コンテキスト追加
             host.addContext("/", (HTTPServer.Request rqst, HTTPServer.Response rspns) -> {
                 rspns.getHeaders().add("Content-Type", "text/plain");
-                rspns.send(200, "Run WK_HttpRunMacro\n\n/post_image?name=abc :\n\t* POST method.\n\t* Send image to ImageJ.\n\t* Send in byte array.\n/run_macro?macro=hoge :\n\t* GET method.\n\t* Run 'hoge' macro.\n\t* Response is JSON.\n\t* JSON consists of Base64 image and log.");
+                rspns.send(200, "Run WK_HttpRunMacro\n\n/post_image?name=abc :\n\t* POST method.\n\t* Send image to ImageJ.\n\t* Send in byte array.\n/run_macro?macro=hoge&par1=1&par2=2&par3 :\n\t* GET method.\n\t* Run 'hoge' macro.\n\t* Response is JSON.\n\t* JSON consists of Base64 image and log.");
                 return 0;
             });
             
@@ -130,7 +130,11 @@ public class WK_WebRunMacro implements ij.plugin.filter.ExtendedPlugInFilter {
                 } else {
                     for (Map.Entry<String, String> entry : params.entrySet()) {
                         if (!entry.getKey().equals("macro")) {
-                            macro_option = macro_option + " " + entry.getKey() + "=" + entry.getValue();
+                            if (entry.getValue() == "") {
+                                macro_option = macro_option + " " + entry.getKey();
+                            } else {
+                                macro_option = macro_option + " " + entry.getKey() + "=" + entry.getValue(); 
+                            }
                         }
                     }
                     
